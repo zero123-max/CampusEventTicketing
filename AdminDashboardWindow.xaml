@@ -2,68 +2,556 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Campus Event &amp; Ticketing - Admin"
-        Width="1200" Height="720"
+        Width="1280" Height="760" MinWidth="1000" MinHeight="650"
         WindowStartupLocation="CenterScreen"
-        Background="#F5F9FF">
+        Background="#EEF4FF">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="NavyBrush" Color="#0B2B5B"/>
+        <SolidColorBrush x:Key="BlueBrush" Color="#0A5CFF"/>
+        <SolidColorBrush x:Key="RedBrush" Color="#EF4444"/>
+        <SolidColorBrush x:Key="TextBrush" Color="#0F285F"/>
+
+        <Style x:Key="PillBtn" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource BlueBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.88"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.7"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DangerBtn" TargetType="Button" BasedOn="{StaticResource PillBtn}">
+            <Setter Property="Background" Value="{StaticResource RedBrush}"/>
+        </Style>
+        <Style x:Key="GrayBtn" TargetType="Button" BasedOn="{StaticResource PillBtn}">
+            <Setter Property="Background" Value="#D9D9D9"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+        <Style x:Key="SmallBtn" TargetType="Button" BasedOn="{StaticResource PillBtn}">
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="2,0"/>
+        </Style>
+        <Style x:Key="SmallDanger" TargetType="Button" BasedOn="{StaticResource SmallBtn}">
+            <Setter Property="Background" Value="{StaticResource RedBrush}"/>
+        </Style>
+        <Style x:Key="SmallGray" TargetType="Button" BasedOn="{StaticResource SmallBtn}">
+            <Setter Property="Background" Value="#E5E7EB"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+
+        <Style x:Key="ToggleBtn" TargetType="Button">
+            <Setter Property="Background" Value="#D9D9D9"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                            <Trigger Property="Tag" Value="Active">
+                                <Setter TargetName="bd" Property="Background" Value="{StaticResource BlueBrush}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="NavBtn" TargetType="Button" BasedOn="{StaticResource ToggleBtn}">
+            <Setter Property="Margin" Value="15,5"/>
+            <Setter Property="Height" Value="42"/>
+        </Style>
+        <Style x:Key="TabBtn" TargetType="Button" BasedOn="{StaticResource ToggleBtn}">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Padding" Value="18,8"/>
+            <Setter Property="Margin" Value="0,0,4,0"/>
+        </Style>
+        <Style x:Key="LetterBtn" TargetType="Button" BasedOn="{StaticResource ToggleBtn}">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <Style x:Key="RoundBtn" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{StaticResource BlueBrush}" CornerRadius="34">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.88"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Padding" Value="6,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="CellStyle" TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Padding="10,0" Background="Transparent">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F0F5FC"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style x:Key="GridStyle" TargetType="DataGrid">
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#E1ECFF"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#E1ECFF"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black"/>
+            </Style.Resources>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#E6ECF5"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="RowHeight" Value="42"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="ColumnWidth" Value="*"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="CellStyle" Value="{StaticResource CellStyle}"/>
+            <Setter Property="ColumnHeaderStyle" Value="{StaticResource HeaderStyle}"/>
+        </Style>
+
+        <DataTemplate x:Key="StatusTemplate">
+            <Border x:Name="pill" CornerRadius="10" Padding="10,2" HorizontalAlignment="Left" Background="#E5E7EB">
+                <TextBlock x:Name="tx" Text="{Binding Status}" FontSize="11" FontWeight="SemiBold"/>
+            </Border>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Status}" Value="Upcoming">
+                    <Setter TargetName="pill" Property="Background" Value="#DBEAFE"/>
+                    <Setter TargetName="tx" Property="Foreground" Value="#1E40AF"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="Active">
+                    <Setter TargetName="pill" Property="Background" Value="#D1FAE5"/>
+                    <Setter TargetName="tx" Property="Foreground" Value="#15803D"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="Resolved">
+                    <Setter TargetName="pill" Property="Background" Value="#D1FAE5"/>
+                    <Setter TargetName="tx" Property="Foreground" Value="#15803D"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="In Progress">
+                    <Setter TargetName="pill" Property="Background" Value="#FEEBC8"/>
+                    <Setter TargetName="tx" Property="Foreground" Value="#B45309"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="Open">
+                    <Setter TargetName="pill" Property="Background" Value="#FEE2E2"/>
+                    <Setter TargetName="tx" Property="Foreground" Value="#B91C1C"/>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="230"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Background="#0B2B5B">
+        <!-- SIDEBAR -->
+        <Grid Grid.Column="0" Background="{StaticResource NavyBrush}">
             <StackPanel>
                 <TextBlock Text="🎓" FontSize="48" HorizontalAlignment="Center" Margin="0,25,0,5"/>
                 <TextBlock Text="ADMIN" Foreground="White" FontSize="24" FontWeight="Bold"
                            HorizontalAlignment="Center" Margin="0,0,0,35"/>
-                <Button Content="Dashboard" Margin="15,5" Height="45" Click="Dashboard_Click"/>
-                <Button Content="Manage Events" Margin="15,5" Height="45" Click="Events_Click"/>
-                <Button Content="Students" Margin="15,5" Height="45" Click="Students_Click"/>
-                <Button Content="Tickets" Margin="15,5" Height="45" Click="Tickets_Click"/>
-                <Button Content="Reports" Margin="15,5" Height="45" Click="Reports_Click"/>
-                <Button Content="Logout" Margin="15,50,15,5" Height="45" Click="Logout_Click"/>
+                <Button x:Name="BtnDashboard" Content="Dashboard"     Style="{StaticResource NavBtn}" Click="Dashboard_Click"/>
+                <Button x:Name="BtnEvents"    Content="Manage Events" Style="{StaticResource NavBtn}" Click="Events_Click"/>
+                <Button x:Name="BtnStudents"  Content="Students"      Style="{StaticResource NavBtn}" Click="Students_Click"/>
+                <Button x:Name="BtnTickets"   Content="Tickets"       Style="{StaticResource NavBtn}" Click="Tickets_Click"/>
+                <Button x:Name="BtnReports"   Content="Reports"       Style="{StaticResource NavBtn}" Click="Reports_Click"/>
             </StackPanel>
+            <Button Content="Logout" Style="{StaticResource NavBtn}" Height="40"
+                    VerticalAlignment="Bottom" Margin="40,0,40,30" Click="Logout_Click"/>
         </Grid>
 
-        <Grid Grid.Column="1" Margin="35">
-            <StackPanel>
-                <TextBlock Text="Admin Dashboard" FontSize="30" FontWeight="Bold" Foreground="{StaticResource TextBrush}"/>
-                <TextBlock Text="Manage the campus event and ticketing system" Foreground="Gray" Margin="0,5,0,30"/>
+        <!-- CONTENT -->
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+            <Grid Margin="30,25,30,90">
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/><ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/><ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="20" Margin="5">
-                        <StackPanel><TextBlock Text="Events" Foreground="Gray"/><TextBlock Text="12" FontSize="30" FontWeight="Bold" Foreground="{StaticResource BlueBrush}"/></StackPanel>
-                    </Border>
-                    <Border Grid.Column="1" Background="White" CornerRadius="12" Padding="20" Margin="5">
-                        <StackPanel><TextBlock Text="Students" Foreground="Gray"/><TextBlock Text="350" FontSize="30" FontWeight="Bold" Foreground="{StaticResource BlueBrush}"/></StackPanel>
-                    </Border>
-                    <Border Grid.Column="2" Background="White" CornerRadius="12" Padding="20" Margin="5">
-                        <StackPanel><TextBlock Text="Tickets" Foreground="Gray"/><TextBlock Text="428" FontSize="30" FontWeight="Bold" Foreground="{StaticResource BlueBrush}"/></StackPanel>
-                    </Border>
-                    <Border Grid.Column="3" Background="White" CornerRadius="12" Padding="20" Margin="5">
-                        <StackPanel><TextBlock Text="Upcoming" Foreground="Gray"/><TextBlock Text="5" FontSize="30" FontWeight="Bold" Foreground="{StaticResource BlueBrush}"/></StackPanel>
-                    </Border>
-                </Grid>
-
-                <Border Background="White" CornerRadius="12" Padding="25" Margin="5,30,5,0">
-                    <StackPanel>
-                        <TextBlock Text="Event Management" FontSize="22" FontWeight="Bold" Foreground="{StaticResource TextBrush}" Margin="0,0,0,20"/>
-                        <StackPanel Orientation="Horizontal">
-                            <Button Content="Add Event" Width="130" Height="45" Background="{StaticResource BlueBrush}" Foreground="White" Margin="0,0,10,0" Click="AddEvent_Click"/>
-                            <Button Content="Edit Event" Width="130" Height="45" Margin="0,0,10,0" Click="EditEvent_Click"/>
-                            <Button Content="Delete Event" Width="130" Height="45" Click="DeleteEvent_Click"/>
+                <!-- DASHBOARD -->
+                <StackPanel x:Name="DashboardPage">
+                    <TextBlock Text="Admin Dashboard" FontSize="30" FontWeight="Bold" Foreground="{StaticResource TextBrush}"/>
+                    <TextBlock Text="Manage the campus event and ticketing system" Foreground="Gray" Margin="0,5,0,25"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="20" Margin="5">
+                            <StackPanel>
+                                <TextBlock Text="Events" Foreground="Gray"/>
+                                <TextBlock x:Name="DashEvents" Text="0" FontSize="30" FontWeight="Bold" Foreground="{StaticResource BlueBrush}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Background="White" CornerRadius="12" Padding="20" Margin="5">
+                            <StackPanel>
+                                <TextBlock Text="Students" Foreground="Gray"/>
+                                <TextBlock x:Name="DashStudents" Text="0" FontSize="30" FontWeight="Bold" Foreground="{StaticResource BlueBrush}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="2" Background="White" CornerRadius="12" Padding="20" Margin="5">
+                            <StackPanel>
+                                <TextBlock Text="Tickets Sold" Foreground="Gray"/>
+                                <TextBlock x:Name="DashTickets" Text="0" FontSize="30" FontWeight="Bold" Foreground="{StaticResource BlueBrush}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="3" Background="White" CornerRadius="12" Padding="20" Margin="5">
+                            <StackPanel>
+                                <TextBlock Text="Upcoming" Foreground="Gray"/>
+                                <TextBlock x:Name="DashUpcoming" Text="0" FontSize="30" FontWeight="Bold" Foreground="{StaticResource BlueBrush}"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                    <Border Background="White" CornerRadius="12" Padding="25" Margin="5,25,5,0">
+                        <StackPanel>
+                            <TextBlock Text="Event Management" FontSize="22" FontWeight="Bold" Foreground="{StaticResource TextBrush}" Margin="0,0,0,20"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Add Event"    Width="130" Height="45" Style="{StaticResource PillBtn}" Margin="0,0,10,0" Click="AddEvent_Click"/>
+                                <Button Content="Edit Event"   Width="130" Height="45" Style="{StaticResource GrayBtn}" Margin="0,0,10,0" Click="EditEvent_Click"/>
+                                <Button Content="Delete Event" Width="130" Height="45" Style="{StaticResource DangerBtn}" Click="DeleteEvent_Click"/>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
+                    </Border>
+                </StackPanel>
 
-            <Button Width="68" Height="68" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                    Background="{StaticResource BlueBrush}" Foreground="White" FontSize="30"
-                    Content="🤖" Click="ChatButton_Click"/>
-        </Grid>
+                <!-- MANAGE EVENTS -->
+                <StackPanel x:Name="EventsPage" Visibility="Collapsed">
+                    <Grid Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock Text="Manage Events" FontSize="28" FontWeight="Bold" Foreground="{StaticResource TextBrush}"/>
+                            <TextBlock Text="Create, view, and manage all campus events." Foreground="Gray" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <Button Content="＋  Create Event" Width="160" HorizontalAlignment="Right" VerticalAlignment="Top"
+                                Style="{StaticResource PillBtn}" Click="CreateEvent_Click"/>
+                    </Grid>
+
+                    <Border Background="White" CornerRadius="10" Padding="8">
+                        <DataGrid x:Name="EventsGrid" Style="{StaticResource GridStyle}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="#" Binding="{Binding No}" Width="45"/>
+                                <DataGridTextColumn Header="Event Name" Binding="{Binding Name}" Width="2*"/>
+                                <DataGridTextColumn Header="Date" Binding="{Binding DateText}" Width="1.2*"/>
+                                <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="1.4*"/>
+                                <DataGridTemplateColumn Header="Status" Width="1.2*" CellTemplate="{StaticResource StatusTemplate}"/>
+                                <DataGridTemplateColumn Header="Actions" Width="190">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="✎ Edit"    Style="{StaticResource SmallBtn}"    Click="EditRow_Click"/>
+                                                <Button Content="🗑 Delete" Style="{StaticResource SmallDanger}" Click="DeleteRow_Click"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+
+                    <Border Background="White" CornerRadius="10" Padding="20" Margin="0,20,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Create / Edit Event" FontSize="16" FontWeight="Bold" Foreground="{StaticResource TextBrush}" Margin="0,0,0,12"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="1.4*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="1.4*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                    <TextBlock Text="Event Name" Foreground="Gray" Margin="0,0,0,4"/>
+                                    <TextBox x:Name="txtEventName"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                                    <TextBlock Text="Date" Foreground="Gray" Margin="0,0,0,4"/>
+                                    <DatePicker x:Name="dpEventDate"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                                    <TextBlock Text="Location" Foreground="Gray" Margin="0,0,0,4"/>
+                                    <TextBox x:Name="txtEventLocation"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="3">
+                                    <TextBlock Text="Status" Foreground="Gray" Margin="0,0,0,4"/>
+                                    <ComboBox x:Name="cbEventStatus">
+                                        <ComboBoxItem Content="Upcoming" IsSelected="True"/>
+                                        <ComboBoxItem Content="Ongoing"/>
+                                        <ComboBoxItem Content="Completed"/>
+                                        <ComboBoxItem Content="Cancelled"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </Grid>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+                                <Button Content="Cancel" Width="90" Style="{StaticResource GrayBtn}" Margin="0,0,10,0" Click="CancelEvent_Click"/>
+                                <Button Content="Save"   Width="90" Style="{StaticResource PillBtn}" Click="SaveEvent_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- STUDENTS -->
+                <StackPanel x:Name="StudentsPage" Visibility="Collapsed">
+                    <Grid Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock Text="Students" FontSize="28" FontWeight="Bold" Foreground="{StaticResource TextBrush}"/>
+                            <TextBlock Text="View and manage all registered students." Foreground="Gray" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <TextBox x:Name="txtSearch" Width="320" HorizontalAlignment="Right" VerticalAlignment="Top"
+                                 ToolTip="Search by name or student ID..." TextChanged="Search_TextChanged"/>
+                    </Grid>
+                    <Border Background="White" CornerRadius="10" Padding="8" Margin="0,0,0,12">
+                        <WrapPanel x:Name="LetterPanel"/>
+                    </Border>
+                    <Border Background="White" CornerRadius="10" Padding="8">
+                        <DataGrid x:Name="StudentsGrid" Style="{StaticResource GridStyle}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="#" Binding="{Binding No}" Width="45"/>
+                                <DataGridTextColumn Header="Student ID" Binding="{Binding StudentId}" Width="*"/>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="2*"/>
+                                <DataGridTextColumn Header="Course" Binding="{Binding Course}" Width="*"/>
+                                <DataGridTextColumn Header="Year Level" Binding="{Binding Year}" Width="*"/>
+                                <DataGridTemplateColumn Header="Status" Width="*" CellTemplate="{StaticResource StatusTemplate}"/>
+                                <DataGridTemplateColumn Header="Actions" Width="170">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="🔍 View" Style="{StaticResource SmallBtn}"  Click="ViewStudent_Click"/>
+                                                <Button Content="✎ Edit"  Style="{StaticResource SmallGray}" Click="EditStudent_Click"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </StackPanel>
+
+                <!-- TICKETS -->
+                <StackPanel x:Name="TicketsPage" Visibility="Collapsed">
+                    <Grid Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="Ticket Management" FontSize="28" FontWeight="Bold" Foreground="{StaticResource TextBrush}"/>
+                            <TextBlock Text="Create and manage ticket allocations for events." Foreground="Gray" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <Button Content="＋  Create Ticket Batch" Width="190" HorizontalAlignment="Right" VerticalAlignment="Top"
+                                Style="{StaticResource PillBtn}" Click="CreateBatch_Click"/>
+                    </Grid>
+                    <Border Background="#DBEAFE" CornerRadius="6" Padding="14,10" Margin="0,0,0,14">
+                        <TextBlock Foreground="#1E40AF" FontSize="12"
+                                   Text="ⓘ  You can set the total number of tickets for each event. The system will automatically generate the tickets."/>
+                    </Border>
+                    <Border Background="White" CornerRadius="10" Padding="8">
+                        <DataGrid x:Name="TicketsGrid" Style="{StaticResource GridStyle}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="#" Binding="{Binding No}" Width="45"/>
+                                <DataGridTextColumn Header="Event Name" Binding="{Binding EventName}" Width="2*"/>
+                                <DataGridTextColumn Header="Total Tickets" Binding="{Binding Total}" Width="*"/>
+                                <DataGridTextColumn Header="Available" Binding="{Binding Available}" Width="*"/>
+                                <DataGridTextColumn Header="Sold" Binding="{Binding Sold}" Width="*"/>
+                                <DataGridTemplateColumn Header="Status" Width="*" CellTemplate="{StaticResource StatusTemplate}"/>
+                                <DataGridTemplateColumn Header="Actions" Width="190">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="✎ Edit"    Style="{StaticResource SmallBtn}"    Click="EditTicket_Click"/>
+                                                <Button Content="🗑 Delete" Style="{StaticResource SmallDanger}" Click="DeleteTicket_Click"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                    <Border Background="White" CornerRadius="10" Padding="20" Margin="0,20,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Create Ticket Batch" FontSize="16" FontWeight="Bold" Foreground="{StaticResource TextBrush}" Margin="0,0,0,12"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="1.5*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                    <TextBlock Text="Event" Foreground="Gray" Margin="0,0,0,4"/>
+                                    <ComboBox x:Name="cbBatchEvent" DisplayMemberPath="Name"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                                    <TextBlock Text="Number of Tickets" Foreground="Gray" Margin="0,0,0,4"/>
+                                    <TextBox x:Name="txtTicketCount"/>
+                                </StackPanel>
+                                <Button Grid.Column="2" Content="🎟  Generate Tickets" Height="34" VerticalAlignment="Bottom"
+                                        Style="{StaticResource PillBtn}" Click="GenerateTickets_Click"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- REPORTS -->
+                <StackPanel x:Name="ReportsPage" Visibility="Collapsed">
+                    <Grid Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock Text="Reports" FontSize="28" FontWeight="Bold" Foreground="{StaticResource TextBrush}"/>
+                            <TextBlock Text="View event reports, ticket sales, and student reports. Also manage problem reports from students." Foreground="Gray" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <Border Background="White" CornerRadius="6" Padding="14,8" HorizontalAlignment="Right" VerticalAlignment="Top">
+                            <TextBlock Text="📅  Aug 01, 2025 - Dec 31, 2025" FontSize="12"/>
+                        </Border>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="20,16" Margin="0,0,8,0">
+                            <StackPanel>
+                                <TextBlock Text="📅 Total Events" Foreground="Gray"/>
+                                <TextBlock x:Name="RepEvents" FontSize="26" FontWeight="Bold" Foreground="{StaticResource BlueBrush}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Background="White" CornerRadius="12" Padding="20,16" Margin="8,0">
+                            <StackPanel>
+                                <TextBlock Text="👥 Total Students" Foreground="Gray"/>
+                                <TextBlock x:Name="RepStudents" FontSize="26" FontWeight="Bold" Foreground="{StaticResource BlueBrush}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="2" Background="White" CornerRadius="12" Padding="20,16" Margin="8,0">
+                            <StackPanel>
+                                <TextBlock Text="🎟 Total Tickets Sold" Foreground="Gray"/>
+                                <TextBlock x:Name="RepSold" FontSize="26" FontWeight="Bold" Foreground="{StaticResource BlueBrush}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="3" Background="White" CornerRadius="12" Padding="20,16" Margin="8,0,0,0">
+                            <StackPanel>
+                                <TextBlock Text="⚠ Total Problem Reports" Foreground="Gray"/>
+                                <TextBlock x:Name="RepProblems" FontSize="26" FontWeight="Bold" Foreground="{StaticResource BlueBrush}"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,22,0,10">
+                        <Button x:Name="TabEvent"   Content="Event Reports"        Style="{StaticResource TabBtn}" Click="ReportTab_Click"/>
+                        <Button x:Name="TabSales"   Content="Ticket Sales Reports" Style="{StaticResource TabBtn}" Click="ReportTab_Click"/>
+                        <Button x:Name="TabStudent" Content="Student Reports"      Style="{StaticResource TabBtn}" Click="ReportTab_Click"/>
+                        <Button x:Name="TabProblem" Content="Problem Reports"      Style="{StaticResource TabBtn}" Click="ReportTab_Click"/>
+                    </StackPanel>
+
+                    <Border Background="White" CornerRadius="10" Padding="8">
+                        <Grid>
+                            <DataGrid x:Name="EventReportGrid" Style="{StaticResource GridStyle}" Visibility="Collapsed">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="#" Binding="{Binding No}" Width="45"/>
+                                    <DataGridTextColumn Header="Event Name" Binding="{Binding Name}" Width="2*"/>
+                                    <DataGridTextColumn Header="Date" Binding="{Binding DateText}" Width="*"/>
+                                    <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid x:Name="SalesGrid" Style="{StaticResource GridStyle}" Visibility="Collapsed">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="#" Binding="{Binding No}" Width="45"/>
+                                    <DataGridTextColumn Header="Event Name" Binding="{Binding EventName}" Width="2*"/>
+                                    <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="*"/>
+                                    <DataGridTextColumn Header="Sold" Binding="{Binding Sold}" Width="*"/>
+                                    <DataGridTextColumn Header="Sold %" Binding="{Binding Percent}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid x:Name="StudentReportGrid" Style="{StaticResource GridStyle}" Visibility="Collapsed">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="#" Binding="{Binding No}" Width="45"/>
+                                    <DataGridTextColumn Header="Course" Binding="{Binding Course}" Width="*"/>
+                                    <DataGridTextColumn Header="Registered Students" Binding="{Binding Count}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid x:Name="ProblemGrid" Style="{StaticResource GridStyle}" Visibility="Collapsed">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="#" Binding="{Binding No}" Width="45"/>
+                                    <DataGridTextColumn Header="Date" Binding="{Binding When}" Width="*"/>
+                                    <DataGridTextColumn Header="Student" Binding="{Binding Student}" Width="*"/>
+                                    <DataGridTextColumn Header="Issue" Binding="{Binding Issue}" Width="2*"/>
+                                    <DataGridTemplateColumn Header="Status" Width="*" CellTemplate="{StaticResource StatusTemplate}"/>
+                                    <DataGridTemplateColumn Header="Actions" Width="110">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="🔍 View" Style="{StaticResource SmallBtn}" Click="ViewProblem_Click"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+
+            </Grid>
+        </ScrollViewer>
+
+        <!-- FLOATING CHAT BUTTON -->
+        <Button Grid.Column="1" Content="💬" FontSize="26" Foreground="White"
+                Width="68" Height="68" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                Margin="0,0,30,20" Style="{StaticResource RoundBtn}" Click="ChatButton_Click"/>
     </Grid>
 </Window>

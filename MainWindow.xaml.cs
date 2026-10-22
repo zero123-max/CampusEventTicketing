@@ -14,7 +14,7 @@ public partial class MainWindow : Window
 
     // ---------------- LOGIN ----------------
 
-    // Demo accounts for now. Replace with a database check when you connect one.
+    // Demo accounts. Students who create an account are checked in the database.
     private const string AdminUser = "admin";
     private const string AdminPass = "admin123";
     private const string StudentUser = "student";
@@ -44,7 +44,17 @@ public partial class MainWindow : Window
             }
             else
             {
-                if (username == StudentUser && password == StudentPass)
+                bool ok = username == StudentUser && password == StudentPass;
+                if (!ok)
+                {
+                    try { ok = Database.CheckLogin(username, password); }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Database error: " + ex.Message, "Login");
+                        return;
+                    }
+                }
+                if (ok)
                 {
                     new DashboardWindow().Show();
                     Close();
@@ -65,6 +75,18 @@ public partial class MainWindow : Window
     private void Forget_Click(object sender, RoutedEventArgs e)
     {
         MessageBox.Show("Please contact the campus administrator to reset your password.", "Forgot password");
+    }
+
+    private void CreateAccount_Click(object sender, RoutedEventArgs e)
+    {
+        var win = new CreateAccountWindow { Owner = this };
+        if (win.ShowDialog() == true)
+        {
+            UsernameBox.Text = win.CreatedUsername;
+            PasswordBox.Clear();
+            StudentRadio.IsChecked = true;
+            PasswordBox.Focus();
+        }
     }
 
     // ---------------- CHATBOT BUTTON ----------------
